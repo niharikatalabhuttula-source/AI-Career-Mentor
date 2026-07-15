@@ -1,4 +1,6 @@
+#creating homepage
 import streamlit as st
+from utils.pdf_reader import extract_text_from_pdf
 st.set_page_config(
     page_title="AI Career Mentor",
     page_icon="🤖",
@@ -12,12 +14,15 @@ uploaded_file = st.file_uploader(
     "Choose a PDF Resume",
     type=["pdf"]
 )
-if uploaded_file:
-    st.success("Resume uploaded successfully!")
-    st.write("File Name:", uploaded_file.name)
 st.sidebar.title("Navigation")
 st.sidebar.write("🏠 Home")
 st.sidebar.write("📄 Resume Analysis")
 st.sidebar.write("📊 ATS Score")
 st.sidebar.write("🎯 Skill Gap")
-st.sidebar.write("📚 Learning Roadmap")    
+st.sidebar.write("📚 Learning Roadmap")   
+if uploaded_file is not None:
+    st.success("Resume uploaded successfully!")
+    st.write("File Name:", uploaded_file.name)
+    extracted_text=extract_text_from_pdf(uploaded_file)
+    st.subheader("📄Extracted Resume Text") 
+    st.text_area("Resume Content",extracted_text,height=400)
