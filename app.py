@@ -3,6 +3,8 @@ import streamlit as st
 from utils.pdf_reader import extract_text_from_pdf
 from utils.skill_extractor import extract_skills
 from utils.education_extractor import extract_education
+from utils.project_extractor import extract_projects
+from utils.certification_extractor import extract_certifications
 st.set_page_config(
     page_title="AI Career Mentor",
     page_icon="🤖",
@@ -28,6 +30,8 @@ if uploaded_file is not None:
     extracted_text=extract_text_from_pdf(uploaded_file)
     skills =extract_skills(extracted_text)
     education=extract_education(extracted_text)
+    projects=extract_projects(extracted_text)
+    certifications=extract_certifications(extracted_text)
     st.subheader("📄Extracted Resume Text") 
     st.text_area("Resume Content",extracted_text,height=400)
     st.subheader("✅ Skills Found")
@@ -47,3 +51,24 @@ if uploaded_file is not None:
             st.write(f"• {edu}")
     else:
         st.warning("No education details found.")
+    st.divider()
+
+    st.subheader("💻 Projects")
+
+    if projects:
+        for project in projects:
+            st.write(f"• {project}")
+    else:
+        st.warning("No project details found.")
+
+    st.divider()
+
+    st.subheader("🏆 Certifications")
+
+    if certifications:
+        for certification in certifications:
+            st.write(f"• {certification}")
+    else:
+        st.warning("No certification details found.")
+
+    
