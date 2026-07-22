@@ -7,6 +7,7 @@ from utils.project_extractor import extract_projects
 from utils.certification_extractor import extract_certifications
 from utils.ats_score import calculate_ats_score
 from utils.suggestion_generator import generate_suggestions
+from utils.role_predictor import predict_roles
 st.set_page_config(
     page_title="AI Career Mentor",
     page_icon="🤖",
@@ -36,6 +37,7 @@ if uploaded_file is not None:
     certifications=extract_certifications(extracted_text)
     ats_score=calculate_ats_score(skills,education,projects,certifications)
     suggestions=generate_suggestions(skills,education,projects,certifications)
+    recommended_roles=predict_roles(skills)
     st.subheader("📄Extracted Resume Text") 
     st.text_area("Resume Content",extracted_text,height=400)
     st.subheader("✅ Skills Found")
@@ -99,4 +101,13 @@ if uploaded_file is not None:
     for suggestion in suggestions:
         st.write(f"• {suggestion}")
 
+    st.divider()
+
+    st.subheader("🎯 Recommended Career Roles")
+
+    if recommended_roles:
+        for role in recommended_roles:
+            st.write(f"• {role}")
+    else:
+        st.warning("No suitable career roles found.")
     
