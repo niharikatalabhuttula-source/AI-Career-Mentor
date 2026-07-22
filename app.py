@@ -5,6 +5,8 @@ from utils.skill_extractor import extract_skills
 from utils.education_extractor import extract_education
 from utils.project_extractor import extract_projects
 from utils.certification_extractor import extract_certifications
+from utils.ats_score import calculate_ats_score
+from utils.suggestion_generator import generate_suggestions
 st.set_page_config(
     page_title="AI Career Mentor",
     page_icon="🤖",
@@ -32,6 +34,8 @@ if uploaded_file is not None:
     education=extract_education(extracted_text)
     projects=extract_projects(extracted_text)
     certifications=extract_certifications(extracted_text)
+    ats_score=calculate_ats_score(skills,education,projects,certifications)
+    suggestions=generate_suggestions(skills,education,projects,certifications)
     st.subheader("📄Extracted Resume Text") 
     st.text_area("Resume Content",extracted_text,height=400)
     st.subheader("✅ Skills Found")
@@ -70,5 +74,29 @@ if uploaded_file is not None:
             st.write(f"• {certification}")
     else:
         st.warning("No certification details found.")
+    
+    st.divider()
+    st.subheader("📊 ATS Score")
+    st.write(f"**Score: {ats_score}/100**")
+
+    if ats_score >= 90:
+        st.success("🟢 Excellent Resume!")
+
+    elif ats_score >= 70:
+        st.info("🟡 Good Resume. A few improvements can make it stronger.")
+
+    elif ats_score >= 50:
+        st.warning("🟠 Resume needs improvement.")
+
+    else:
+        st.error("🔴 Poor Resume. Add more details and improve your resume.")
+
+    st.divider()
+
+
+    st.subheader("💡 Resume Improvement Suggestions")
+
+    for suggestion in suggestions:
+        st.write(f"• {suggestion}")
 
     
